@@ -213,7 +213,7 @@ string LinuxParser::Ram(int pid) {
       }
     }
   }
-  int ramL = (std::stoi(ram))/1000;
+  long ramL = (std::stol(ram))/1000;
   ram = std::to_string(ramL);
   return ram;
 }
@@ -222,31 +222,26 @@ string LinuxParser::Ram(int pid) {
 // DONE: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) { 
-  std::string line;
-  std::string key;
-  std::string value;
+  std::string line, key, value, uid;
   std::ifstream stream(LinuxParser::kProcDirectory + std::to_string(pid) + LinuxParser::kStatusFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
         if (key == "Uid:") {
-          return value;
+          uid = value;
         }
       }
     }
   }
-  return 0;
+  return uid;
 }
 
 // DONE: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int pid) { 
-  std::string line;
-  std::string key;
+  std::string line, key, value, x, user;
   std::string uid = Uid(pid);
-  std::string value;
-  std::string x;
   std::string PID = std::to_string(pid);
   std::ifstream stream(LinuxParser::kPasswordPath);
   if (stream.is_open()) {
@@ -255,12 +250,12 @@ string LinuxParser::User(int pid) {
       std::istringstream linestream(line);
       while (linestream >> key >> x >> value) {
         if (value == uid) {
-          return key;
+          user = key;
         }
       }
     }
   }
-  return 0;
+  return user;
 }
 
 // DONE: Read and return the uptime of a process
@@ -279,8 +274,7 @@ long LinuxParser::UpTime(int pid) {
       }
     }
   }
-  startTime = std::stoi(statString[21])/sysconf(_SC_CLK_TCK);
-  //startTime = Format::ElapsedTime(startTime);
+  startTime = std::stol(statString[21])/sysconf(_SC_CLK_TCK);
   return startTime; 
 
 }
