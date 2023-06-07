@@ -105,7 +105,7 @@ long LinuxParser::UpTime() {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
       while (linestream >> value >> misc) {
-          uptime = std::stol(value);
+        if(value != "") {uptime = std::stol(value);}
       }
     }
   }
@@ -207,8 +207,8 @@ string LinuxParser::Ram(int pid) {
     while (std::getline(stream, line)) {
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "VmSize:") {
-          ram = value;
+        if (key == "VmSize:" && value != "") {
+            ram = value;
         }
       }
     }
