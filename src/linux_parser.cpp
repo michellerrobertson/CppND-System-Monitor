@@ -207,12 +207,12 @@ string LinuxParser::Ram(int pid) {
       while (linestream >> key >> value) {
         if (key == "VmSize:" && value != "") {
             ram = value;
+            long ramL = (std::stol(ram))/1000;
+            ram = std::to_string(ramL);
         }
       }
     }
   }
-  long ramL = (std::stol(ram))/1000;
-  ram = std::to_string(ramL);
   return ram;
 }
 

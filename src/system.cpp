@@ -28,10 +28,12 @@ Processor& System::Cpu() { return cpu_; }
 // DONE: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
   pids_ = LinuxParser::Pids();
+  processes_.clear();
   for(int i=0; (unsigned)i<pids_.size(); i++) {
     Process process(pids_[i]);
     processes_.push_back(process);
   }
+  sort(processes_.rbegin(), processes_.rend());
   return processes_; 
 }
 
